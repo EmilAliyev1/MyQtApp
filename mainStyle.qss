@@ -1,0 +1,96 @@
+QWidget#Sidebar {
+    border: none;
+    border-right: 1px solid #bababa;
+}
+QWidget {
+    background: #f0f0f0;
+    color: black;
+}
+QLabel#AccountInfoLabel {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333333;
+    background-color: #e6f0ff;
+    padding: 10px 15px;
+    border: 1px solid #b0c4de;
+    border-radius: 8px;
+    text-align: center;
+}
+QPushButton#UserInfoButton{
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+}
+QPushButton#UserInfoButton:hover {
+    background: #e0e0e0;
+}
+QPushButton#UserInfoButton:pressed {
+    background: #d3d3d3;
+}
+QPushButton#OtherButton {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 15px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: 1px solid #388E3C;
+}
+QPushButton#OtherButton:hover {
+    background: #45a049;
+    border: 1px solid #388E3C;
+}
+QPushButton#OtherButton:pressed {
+    background: #388E3C;
+    border: 1px solid #45a049;
+}
+
+
+
+QTableWidget#RecordTable {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    gridline-color: #ddd;
+    font-size: 14px;
+}
+QHeaderView::section {
+    background-color: #4CAF50;
+    color: white;
+    padding: 4px;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+QHeaderView::section:hover {
+    background-color: #45A049; /* Slightly darker green */
+}
+
+QHeaderView::section:pressed {
+    background-color: #D6EAF8; /* Light blue background */
+    color: #154360;           /* Dark blue text */
+    border: 1px solid #85C1E9;
+}
+QTableWidget#RecordTable::item {
+    padding: 5px;
+}
+
+QPushButton#RecordButton {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+QPushButton#RecordButton:hover {
+    background-color: #45a049;
+}
+QPushButton#RecordButton:pressed {
+    background-color: #39903d;
+}
+
+QWidget#IncomeExpenseWidget {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}

@@ -1,0 +1,8 @@
+﻿   Qt/MSBuild: 3.3.0.13
+   Qt: 6.8.0
+  SignWindow.cpp
+C:\Users\aliye\source\repos\main_project\DataBase.h(7,14): warning C4091: 'static ': ignored on left of 'DataBase' when no variable is declared
+  (compiling source file 'SignWindow.cpp')
+  
+C:\Users\aliye\source\repos\main_project\SignWindow.cpp(199,38): warning C4101: 'e': unreferenced local variable
+  main_project.vcxproj -> C:\Users\aliye\source\repos\main_project\x64\Debug\main_project.exe

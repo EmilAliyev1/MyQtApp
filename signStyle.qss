@@ -1,0 +1,41 @@
+QWidget {
+    color: black;
+    background-color: #f0f0f5;
+}
+QLabel#CompanynameLabel, QLabel#PasswordLabel, QLabel#EmailLabel {
+    padding-top: 20px;
+    color: #333333;
+    font-size: 16px;
+}
+QLabel {
+    color: #333333;
+    font-size: 18px;
+}
+QLineEdit {
+    padding: 6px;
+    font-size: 14px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    background-color: #ffffff;
+}
+QPushButton#LoginButton, QPushButton#SignupButton, QPushButton#LogOutButton {
+    margin-top: 50px;
+    background-color: #5a9bd3;
+    color: #ffffff;
+    font-size: 15px;
+    padding: 8px;
+    border-radius: 4px;
+}
+QPushButton#LoginButton:hover, QPushButton#SignupButton:hover, QPushButton#LogOutButton:hover {
+    background-color: #3d7aa5;
+}
+QPushButton#goToSignupButton, QPushButton#goToLoginButton {
+    background-color: transparent;
+    color: #5a9bd3;
+    font-size: 13px;
+    text-decoration: underline;
+    border: none;
+}
+QPushButton#goToSignupButton:hover, QPushButton#goToLoginButton:hover {
+    color: #3d7aa5;
+}

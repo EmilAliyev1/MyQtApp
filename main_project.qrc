@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/main_project">
+        <file>signStyle.qss</file>
+        <file>mainStyle.qss</file>
+    </qresource>
+</RCC>
