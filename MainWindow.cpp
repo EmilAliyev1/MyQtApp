@@ -9,8 +9,7 @@
 #include <QMessageBox>
 #include "CurrencyConverter.h"
 #include <qinputdialog.h>
-#include <QHeaderView> 
-
+#include <QHeaderView>
 
 
 MainWindow::MainWindow(QWidget* parent)
@@ -20,6 +19,12 @@ MainWindow::MainWindow(QWidget* parent)
 
     loadStylesheet();
     setupUi();
+
+    QScreen* screen = QGuiApplication::primaryScreen();
+    QRect screenGeometry = screen->geometry();  // Get the screen's geometry
+    int x = (screenGeometry.width() - width()) / 2;  // Center horizontally
+    int y = (screenGeometry.height() - height()) / 2;  // Center vertically
+    move(x, y - 100);  // Move the window to the center
 }
 
 void MainWindow::loadStylesheet() {
@@ -42,7 +47,7 @@ void MainWindow::setupUi() {
 
     sidebar = createSidebarWidget();
     accountInfoWidget = createAccountInfoWidget();
-    incomeExpenseWidget = createIncomeExpenseWidget();
+    incomeExpenseWidget = createTransactionWidget();
 
     mainLayout->addWidget(sidebar);
     mainLayout->addWidget(accountInfoWidget);
@@ -110,7 +115,7 @@ QWidget* MainWindow::createAccountInfoWidget() {
     return accountInfoWidget;
 }
 
-QWidget* MainWindow::createIncomeExpenseWidget() {
+QWidget* MainWindow::createTransactionWidget() {
     QWidget* incomeExpenseWidget = new QWidget(this);
     incomeExpenseWidget->setObjectName("IncomeExpenseWidget");
 
@@ -121,6 +126,11 @@ QWidget* MainWindow::createIncomeExpenseWidget() {
     recordsTable = new QTableWidget(this);
     recordsTable->setColumnCount(5);
     recordsTable->setHorizontalHeaderLabels({ "Amount", "Category", "Date", "Notes", "Currency" });
+    recordsTable->setColumnWidth(0, 120);  // Set the width of the "Amount" column to 150 pixels
+    recordsTable->setColumnWidth(1, 175);  // Set the width of the "Category" column to 200 pixels
+    recordsTable->setColumnWidth(2, 125);  // Set the width of the "Date" column to 120 pixels
+    recordsTable->setColumnWidth(3, 175);  // Set the width of the "Notes" column to 250 pixels
+    recordsTable->setColumnWidth(4, 100);
     recordsTable->horizontalHeader()->setStretchLastSection(true);
     recordsTable->setObjectName("RecordTable");
 
@@ -129,12 +139,12 @@ QWidget* MainWindow::createIncomeExpenseWidget() {
 
     QHBoxLayout* buttonLayout = new QHBoxLayout();
 
-    QPushButton* addButton = createButton("Add Record", &MainWindow::addRecord);
-    addButton->setObjectName("RecordButton");
-    QPushButton* editButton = createButton("Edit Record", &MainWindow::editRecord);
-    editButton->setObjectName("RecordButton");
-    QPushButton* deleteButton = createButton("Delete Record", &MainWindow::deleteRecord);
-    deleteButton->setObjectName("RecordButton");
+    QPushButton* addButton = createButton("Add Record", &MainWindow::widgetAddTransaction);
+    addButton->setObjectName("TransactionButton");
+    QPushButton* editButton = createButton("Edit Record", &MainWindow::widgetEditTransaction);
+    editButton->setObjectName("TransactionButton");
+    QPushButton* deleteButton = createButton("Delete Record", &MainWindow::widgetDeleteTransaction);
+    deleteButton->setObjectName("TransactionButton");
 
     buttonLayout->addWidget(addButton);
     buttonLayout->addWidget(editButton);
@@ -146,7 +156,7 @@ QWidget* MainWindow::createIncomeExpenseWidget() {
 }
 
 
-void MainWindow::addRecord() {
+void MainWindow::widgetAddTransaction() {
     bool ok;
     double amount = QInputDialog::getDouble(this, "Add Record", "Amount:", 0, -100000, 100000, 2, &ok);
     if (!ok) return;
@@ -172,6 +182,7 @@ void MainWindow::addRecord() {
     recordsTable->setItem(row, 3, new QTableWidgetItem(notes));
     recordsTable->setItem(row, 4, new QTableWidgetItem(currency));
 
+
     user_main.addTransaction(amount, category.toStdString(), date.toStdString(), notes.toStdString(), currency.toStdString());
 
     for (auto& user : DataBase::users) {
@@ -181,10 +192,10 @@ void MainWindow::addRecord() {
         }
     }
 
-    DataBase::saveUsers(DataBase::users);
+    DataBase::saveUsers();
 }
 
-void MainWindow::editRecord() {
+void MainWindow::widgetEditTransaction() {
     int row = recordsTable->currentRow();
     if (row < 0) {
         QMessageBox::warning(this, "Edit Record", "Please select a record to edit.");
@@ -208,15 +219,25 @@ void MainWindow::editRecord() {
     if (!ok || currency.isEmpty()) return;
 
 
-    user_main.editTransaction(row, amount, category.toStdString(), date.toStdString(), notes.toStdString(), currency.toStdString());
     recordsTable->item(row, 0)->setText(QString::number(amount));
     recordsTable->item(row, 1)->setText(category);
     recordsTable->item(row, 2)->setText(date);
     recordsTable->item(row, 3)->setText(notes);
     recordsTable->item(row, 4)->setText(currency);
+
+    user_main.editTransaction(row, amount, category.toStdString(), date.toStdString(), notes.toStdString(), currency.toStdString());
+
+    for (auto& user : DataBase::users) {
+        if (user.getId() == user_main.getId()) {
+            user = user_main;  // Update the user
+            return;
+        }
+    }
+
+    DataBase::saveUsers();
 }
 
-void MainWindow::deleteRecord() {
+void MainWindow::widgetDeleteTransaction() {
     int selectedRow = recordsTable->currentRow();
 
     if (selectedRow < 0) {
@@ -243,6 +264,15 @@ void MainWindow::deleteRecord() {
             QMessageBox::critical(this, "Error", "Failed to delete the record: " + QString(e.what()));
         }
     }
+
+    for (auto& user : DataBase::users) {
+        if (user.getId() == user_main.getId()) {
+            user = user_main;  // Update the user
+            return;
+        }
+    }
+
+    DataBase::saveUsers();
 }
 
 void MainWindow::populateRecordsTable() {
@@ -297,11 +327,4 @@ void MainWindow::showAccountInfo(const User& user) {
     accountEmailLabel->setText(accountEmailLabel->text() + "<font color='red'>" + ":  " + QString::fromStdString(user.getEmail()));
 
     user_main = user;
-}
-
-void MainWindow::closeEvent(QCloseEvent* event) {
-    DataBase::saveUsers(DataBase::users);
-    QApplication::quit();
-    event->accept();
-    exit(0);
 }

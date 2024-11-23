@@ -45,5 +45,7 @@ public:
     std::vector<Transaction> getTransactions() const;
 
     bool readFromBinary(std::ifstream& in);
-    static User findUserByEmail(const std::vector<User>& users, const std::string& email);
+    static User findUserByEmail(const QString &email);
+
+    static User findUserByCompanyName(const QString &companyName);
 };

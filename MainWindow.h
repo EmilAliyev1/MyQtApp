@@ -23,24 +23,21 @@ public:
     ~MainWindow();
     void showAccountInfo(const User& user);
 
-protected:
-    void closeEvent(QCloseEvent* event) override;
-
 private slots:
     void populateRecordsTable();
 
     void showUserInfoForm() ;
     void showIncomeExpenseWidget();
 
-    void addRecord();
-    void editRecord();
-    void deleteRecord();
+    void widgetAddTransaction();
+    void widgetEditTransaction();
+    void widgetDeleteTransaction();
 
 private:
     void setupUi();
     QWidget* createSidebarWidget();
     QWidget* createAccountInfoWidget();
-    QWidget* createIncomeExpenseWidget();
+    QWidget* createTransactionWidget();
 
     QPushButton* createButton(const QString& text, void (MainWindow::* slot)());
     QLineEdit* createLineEdit(const QString& placeholder, bool isPasswordField = false);
@@ -55,7 +52,6 @@ private:
     QTableWidget* recordsTable;
     User user_main;
 
-    // Labels for account information
     QLabel* accountCompanynameLabel;
     QLabel* accountEmailLabel;
 

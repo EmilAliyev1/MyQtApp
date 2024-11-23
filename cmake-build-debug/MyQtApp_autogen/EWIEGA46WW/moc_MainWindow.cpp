@@ -33,9 +33,9 @@ struct qt_meta_stringdata_MainWindow_t {
     char stringdata2[1];
     char stringdata3[17];
     char stringdata4[24];
-    char stringdata5[10];
-    char stringdata6[11];
-    char stringdata7[13];
+    char stringdata5[21];
+    char stringdata6[22];
+    char stringdata7[24];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_MainWindow_t::offsetsAndSizes) + ofs), len 
@@ -46,18 +46,18 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
         QT_MOC_LITERAL(32, 0),  // ""
         QT_MOC_LITERAL(33, 16),  // "showUserInfoForm"
         QT_MOC_LITERAL(50, 23),  // "showIncomeExpenseWidget"
-        QT_MOC_LITERAL(74, 9),  // "addRecord"
-        QT_MOC_LITERAL(84, 10),  // "editRecord"
-        QT_MOC_LITERAL(95, 12)   // "deleteRecord"
+        QT_MOC_LITERAL(74, 20),  // "widgetAddTransaction"
+        QT_MOC_LITERAL(95, 21),  // "widgetEditTransaction"
+        QT_MOC_LITERAL(117, 23)   // "widgetDeleteTransaction"
     },
     "MainWindow",
     "populateRecordsTable",
     "",
     "showUserInfoForm",
     "showIncomeExpenseWidget",
-    "addRecord",
-    "editRecord",
-    "deleteRecord"
+    "widgetAddTransaction",
+    "widgetEditTransaction",
+    "widgetDeleteTransaction"
 };
 #undef QT_MOC_LITERAL
 } // unnamed namespace
@@ -109,11 +109,11 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'showIncomeExpenseWidget'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'addRecord'
+        // method 'widgetAddTransaction'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'editRecord'
+        // method 'widgetEditTransaction'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'deleteRecord'
+        // method 'widgetDeleteTransaction'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
@@ -128,9 +128,9 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 0: _t->populateRecordsTable(); break;
         case 1: _t->showUserInfoForm(); break;
         case 2: _t->showIncomeExpenseWidget(); break;
-        case 3: _t->addRecord(); break;
-        case 4: _t->editRecord(); break;
-        case 5: _t->deleteRecord(); break;
+        case 3: _t->widgetAddTransaction(); break;
+        case 4: _t->widgetEditTransaction(); break;
+        case 5: _t->widgetDeleteTransaction(); break;
         default: ;
         }
     }

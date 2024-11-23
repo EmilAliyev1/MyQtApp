@@ -4,13 +4,22 @@
 #include <vector>
 
 int DataBase::id = 1;
+
+void DataBase::initializeId() {
+    if (!users.empty()) {
+        id = users.back().getId() + 1; // Use users.back() to access the last element
+    } else {
+        id = 1;
+    }
+}
+
 std::vector<User> DataBase::users = GetAllUsers();;
 
 void DataBase::addUser(const User& user) {
-    users.push_back(user);  // Adds a new user to the static vector
+    users.push_back(user);
 }
 
-bool DataBase::saveUsers(std::vector<User>& users) {
+bool DataBase::saveUsers() {
     try {
         std::ofstream ofs{ "/home/dingo21/CLionProjects/Checking/Data.bin", std::ios::binary | std::ios::out | std::ios::trunc };
         if (!ofs.is_open())
@@ -89,19 +98,16 @@ std::vector<User> DataBase::GetAllUsers() {
     while (ifs.peek() != EOF) {
         User user;
 
-        // Read User ID
         int id;
         if (!ifs.read(reinterpret_cast<char*>(&id), sizeof(id))) break;
         user.setId(id);
 
-        // Read company name
         size_t companyNameSize;
         if (!ifs.read(reinterpret_cast<char*>(&companyNameSize), sizeof(companyNameSize))) break;
         std::string companyName(companyNameSize, '\0');
         if (!ifs.read(&companyName[0], companyNameSize)) break;
         user.setCompanyName(companyName);
 
-        // Read email
         size_t emailSize;
         if (!ifs.read(reinterpret_cast<char*>(&emailSize), sizeof(emailSize))) break;
         std::string email(emailSize, '\0');
@@ -114,16 +120,13 @@ std::vector<User> DataBase::GetAllUsers() {
         if (!ifs.read(&password[0], passwordSize)) break;
         user.setPassword(password);
 
-        // Read number of transactions
         size_t transactionCount;
         if (!ifs.read(reinterpret_cast<char*>(&transactionCount), sizeof(transactionCount))) break;
 
-        // Read each transaction
         for (size_t i = 0; i < transactionCount; ++i) {
             double amount;
             size_t categorySize, notesSize, currencySize, dateSize;
 
-            // Read transaction fields
             if (!ifs.read(reinterpret_cast<char*>(&amount), sizeof(amount))) break;
 
             if (!ifs.read(reinterpret_cast<char*>(&categorySize), sizeof(categorySize))) break;
@@ -142,11 +145,9 @@ std::vector<User> DataBase::GetAllUsers() {
             std::string date(dateSize, '\0');
             if (!ifs.read(&date[0], dateSize)) break;
 
-            // Add transaction to the user
             user.addTransaction(amount, category, date, notes, currency);
         }
 
-        // Add the user to the vector
         users.push_back(user);
     }
 

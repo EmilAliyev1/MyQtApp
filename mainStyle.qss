@@ -73,7 +73,7 @@ QTableWidget#RecordTable::item {
     padding: 5px;
 }
 
-QPushButton#RecordButton {
+QPushButton#TransactionButton {
     background-color: #4CAF50;
     color: white;
     border: none;
@@ -81,10 +81,10 @@ QPushButton#RecordButton {
     border-radius: 4px;
     font-size: 14px;
 }
-QPushButton#RecordButton:hover {
+QPushButton#TransactionButton:hover {
     background-color: #45a049;
 }
-QPushButton#RecordButton:pressed {
+QPushButton#TransactionButton:pressed {
     background-color: #39903d;
 }
 

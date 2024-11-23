@@ -29,9 +29,11 @@ private slots:
     void showLoginForm();
 
 private:
-    void closeEvent(QCloseEvent* event);
     void setLoginForm();
     void setSignupForm();
+
+    bool validateSignup(const QString &companyname, const QString &email, const QString &password);
+
     //User* findUser(const QString& companyName);
     void loadStylesheet();
     void setupUI();
@@ -39,9 +41,7 @@ private:
     QWidget* createLoginWidget();
     QWidget* createSignupWidget();
     QLineEdit* createLineEdit(const QString& placeholder, bool isPasswordField = false);
-    QPushButton* createButton(const QString& text, void (SignWindow::* slot)());
 
-    // UI Elements
     QWidget* loginWidget;
     QWidget* signupWidget;
 
@@ -51,12 +51,10 @@ private:
     QLineEdit* signupEmailEdit;
     QLineEdit* signupPasswordEdit;
 
-    // Account Information
     QString currentCompanyname;
     QString currentEmail;
     QString currentPassword;
 
-    // Pointer to Main Window
     MainWindow* mainWindow;
 };
 

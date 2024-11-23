@@ -1,10 +1,11 @@
 #pragma once
 #include <string>
+#include "User.h"
 
 class Transaction
 {
 private:
-    double amount;
+    double amount{};
     std::string category;
     std::string date;
     std::string notes;

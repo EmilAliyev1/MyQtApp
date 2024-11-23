@@ -4,14 +4,17 @@
 #include <iostream>
 
 int main(int argc, char* argv[]) {
-
     QApplication app(argc, argv);
 
     MainWindow mainWindow;
-    mainWindow.show();
-
     SignWindow* signWindow = new SignWindow(&mainWindow);
-    signWindow->exec();
+
+    // Connect the windows to ensure the app quits properly
+    QObject::connect(&mainWindow, &QMainWindow::destroyed, &app, &QApplication::quit);
+    QObject::connect(signWindow, &QDialog::destroyed, &app, &QApplication::quit);
+
+    mainWindow.show();
+    signWindow->show();
 
     return app.exec();
 }

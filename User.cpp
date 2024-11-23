@@ -45,7 +45,7 @@ void User::displayUser() const
     std::cout << this->_id << " " << this->_companyName << " " << this->_email << '\n';
 }
 
-void User::displayTransactions(const std::vector<Transaction> &transactions) const
+void User::displayTransactions(const std::vector<Transaction> &transactions) const //delete must
 {
     for (const auto& element : transactions) {
         std::cout << element.getAmount() << " ";
@@ -136,11 +136,20 @@ bool User::readFromBinary(std::ifstream& in) {
     return true;
 }
 
-User User::findUserByEmail(const std::vector<User>& users, const std::string& email) {
-    for (const auto& user : users) {
-        if (user.getEmail() == email) {
+User User::findUserByEmail(const QString &email) {
+    for (const auto& user : DataBase::users) {
+        if (user.getEmail() == email.toStdString()) {
             return user;
         }
     }
-    throw std::runtime_error("User with email " + email + " not found.");
+    return {};
+}
+
+User User::findUserByCompanyName(const QString &companyName) {
+    for (const auto& user : DataBase::users) {
+        if (user.getCompanyName() == companyName.toStdString()) {
+            return user;
+        }
+    }
+    return {};
 }

@@ -8,14 +8,16 @@
 #include <QFile>
 #include <QApplication>
 #include "User.h"
-
+#include <QRegularExpression>
 
 SignWindow::SignWindow(MainWindow* parent)
     : QDialog(parent), mainWindow(parent) {
 
     setWindowTitle("Company Authentication");
     setFixedSize(550, 500);
+    setModal(true);
 
+    DataBase::initializeId();
 
     connect(this, &QDialog::finished, parent, &QMainWindow::close);
 
@@ -23,7 +25,18 @@ SignWindow::SignWindow(MainWindow* parent)
     setupUI();
 
     setLoginForm();
+
+    // Center the window on the screen
+    QScreen* screen = QGuiApplication::screenAt(this->geometry().center());
+    if (!screen) {
+        screen = QGuiApplication::primaryScreen();  // Fallback to primary screen
+    }
+    QRect screenGeometry = screen->geometry();
+    int x = (screenGeometry.width() - width()) / 2;
+    int y = (screenGeometry.height() - height()) / 2;
+    move(x, y - 100);
 }
+
 
 SignWindow::~SignWindow() = default;
 
@@ -43,12 +56,12 @@ void SignWindow::loadStylesheet() {
 void SignWindow::setupUI() {
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
 
-    // Create login and signup widgets
     loginWidget = createLoginWidget();
     signupWidget = createSignupWidget();
 
     mainLayout->addWidget(loginWidget);
     mainLayout->addWidget(signupWidget);
+    signupWidget->hide();
     setLayout(mainLayout);
 }
 
@@ -68,11 +81,14 @@ QWidget* SignWindow::createLoginWidget() {
     passwordLabel->setObjectName("PasswordLabel");
     loginPasswordEdit = createLineEdit("Enter your password", true);
 
-    QPushButton* loginButton = createButton("Login", &SignWindow::onLoginClicked);
-    loginButton->setObjectName("LoginButton");
+    QPushButton* loginButton = new QPushButton("Login");
+    connect(loginButton, &QPushButton::clicked, this, &SignWindow::onLoginClicked);
+    loginButton->setCursor(Qt::PointingHandCursor);
     loginButton->setObjectName("LoginButton");
 
-    QPushButton* goToSignupButton = createButton("Create an account", &SignWindow::showSignupForm);
+    QPushButton* goToSignupButton = new QPushButton("Create an account");
+    connect(goToSignupButton, &QPushButton::clicked, this, &SignWindow::showSignupForm);
+    goToSignupButton->setCursor(Qt::PointingHandCursor);
     goToSignupButton->setObjectName("goToSignupButton");
 
     layout->addWidget(title);
@@ -108,12 +124,17 @@ QWidget* SignWindow::createSignupWidget() {
     passwordLabel->setObjectName("PasswordLabel");
     signupPasswordEdit = createLineEdit("Choose a password", true);
 
-    QPushButton* signupButton = createButton("Sign Up", &SignWindow::onSignupClicked);
+    QPushButton* signupButton = new QPushButton("Sign Up");
+    connect(signupButton, &QPushButton::clicked, this, &SignWindow::onSignupClicked);
+    signupButton->setCursor(Qt::PointingHandCursor);
     signupButton->setObjectName("SignupButton");
 
-    QPushButton* goToLoginButton = createButton("Already have an account? Log in", &SignWindow::showLoginForm);
+    QPushButton* goToLoginButton = new QPushButton("Already have an account? Log in");
+    connect(goToLoginButton, &QPushButton::clicked, this, &SignWindow::showLoginForm);
+    goToLoginButton->setCursor(Qt::PointingHandCursor);
     goToLoginButton->setObjectName("goToLoginButton");
 
+    // Add widgets
     layout->addWidget(title);
     layout->addWidget(companynameLabel);
     layout->addWidget(signupCompanynameEdit);
@@ -137,13 +158,6 @@ QLineEdit* SignWindow::createLineEdit(const QString& placeholder, bool isPasswor
     return lineEdit;
 }
 
-QPushButton* SignWindow::createButton(const QString& text, void (SignWindow::* slot)()) {
-    QPushButton* button = new QPushButton(text);
-    button->setCursor(Qt::PointingHandCursor);
-    connect(button, &QPushButton::clicked, this, slot);
-    return button;
-}
-
 void SignWindow::showSignupForm() {
     setSignupForm();
 }
@@ -162,15 +176,77 @@ void SignWindow::setSignupForm() {
     loginWidget->hide();
 }
 
+bool SignWindow::validateSignup(const QString& companyname, const QString& email, const QString& password) {
+    // Check if any field is empty
+    if (companyname.isEmpty() || email.isEmpty() || password.isEmpty()) {
+        QMessageBox::warning(this, "Signup Failed", "Please fill in all fields.");
+        return false;
+    }
+
+    // Simple company name validation (must be at least 3 characters)
+    if (companyname.length() < 3) {
+        QMessageBox::warning(this, "Signup Failed", "Company name must be at least 3 characters long.");
+        return false;
+    }
+
+    // Check for exactly one '@' symbol in email
+    if (email.count('@') != 1) {
+        QMessageBox::warning(this, "Signup Failed", "Invalid email address.\n\nEmail should contain exactly one '@' symbol.");
+        return false;
+    }
+
+    // Split email into local and domain parts
+    QStringList emailParts = email.split('@');
+    if (emailParts.size() != 2) {
+        QMessageBox::warning(this, "Signup Failed", "Invalid email address format.");
+        return false;
+    }
+
+    QString localPart = emailParts[0];
+    QString domainPart = emailParts[1];
+
+    // Validate the domain part
+    if (domainPart != "gmail.com" && domainPart != "outlook.com" && domainPart != "hotmail.com") {
+        QMessageBox::warning(this, "Signup Failed", "Invalid email domain.\n\nThe supported email domains are: \ngmail.com, outlook.com, or hotmail.com.");
+        return false;
+    }
+
+    // Validate the local part (basic rules: non-empty and valid characters)
+    QRegularExpression localPartRegex("^[a-zA-Z0-9._%+-]+$"); // Allows letters, numbers, '.', '_', '%', '+', '-'
+    QRegularExpressionMatch match = localPartRegex.match(localPart);
+
+    if (localPart.isEmpty() || !match.hasMatch()) {
+        QMessageBox::warning(this, "Signup Failed", "Invalid email address.\n\nThe part before '@' contains invalid characters.");
+        return false;
+    }
+
+    // Simple password validation (must be at least 6 characters)
+    if (password.length() < 6) {
+        QMessageBox::warning(this, "Signup Failed", "Password must be at least 6 characters long.");
+        return false;
+    }
+
+    // Check if company name is already taken
+    if (companyname.toStdString() == User::findUserByCompanyName(companyname).getCompanyName()) {
+        QMessageBox::warning(this, "Signup Failed", "Another user with the exact Company name was found.");
+        return false;
+    }
+
+    // Check if email is already taken
+    if (email.toStdString() == User::findUserByEmail(email).getEmail()) {
+        QMessageBox::warning(this, "Signup Failed", "Another user with the exact Email was found.");
+        return false;
+    }
+
+    // If all checks pass, return true
+    return true;
+}
 
 void SignWindow::onLoginClicked() {
     QString email = loginEmailEdit->text();
     QString password = loginPasswordEdit->text();
 
 
-    foreach (User user, DataBase::users) {
-        user.displayUser();
-    }
 
     if (email.isEmpty() || password.isEmpty()) {
         QMessageBox::warning(this, "Login Failed", "Please fill in both email and password.");
@@ -178,7 +254,7 @@ void SignWindow::onLoginClicked() {
     }
 
     try {
-        User user = User::findUserByEmail(DataBase::users, email.toStdString());
+        User user = User::findUserByEmail(email);
 
         if (user.getPassword() == password.toStdString()) {
             currentCompanyname = QString::fromStdString(user.getCompanyName());
@@ -210,44 +286,35 @@ void SignWindow::onSignupClicked() {
     QString email = signupEmailEdit->text();
     QString password = signupPasswordEdit->text();
 
+    User user = User::findUserByEmail(email);
 
-    foreach (User user, DataBase::users) {
-        user.displayUser();
+
+    if (!validateSignup(companyname, email, password)) {
+        // If validation fails, return early (no need to proceed)
+        return;
     }
 
-    if (companyname.isEmpty() || email.isEmpty() || password.isEmpty()) {
-        QMessageBox::warning(this, "Signup Failed", "Please fill in all fields.");
+    // If all validations pass
+    currentCompanyname = companyname;
+    currentEmail = email;
+    currentPassword = password;
+
+    // Create the new user
+    User newUser(companyname.toStdString(), email.toStdString(), password.toStdString());
+    DataBase::addUser(newUser);
+
+    // Show success message
+    QMessageBox::information(this, "Signup Success", "Account created successfully!");
+
+    // Pass user info to the main window
+    auto* mainWindow = dynamic_cast<MainWindow*>(parentWidget());
+    if (mainWindow) {
+        mainWindow->showAccountInfo(newUser);
     }
-    else {
 
-        // Create the new user
-        currentCompanyname = companyname;
-        currentEmail = email;
-        currentPassword = password;
-        User newUser(companyname.toStdString(), email.toStdString(), password.toStdString());
-        DataBase::addUser(newUser);
-        // Save all users to binary file
-        
-        QMessageBox::information(this, "Signup Success", "Account created successfully!");
-        
-
-        // Update the main window with the new user info
-        auto* mainWindow = dynamic_cast<MainWindow*>(parentWidget());
-        if (mainWindow) {
-            mainWindow->showAccountInfo(newUser);
-        }
-
-        disconnect(this, &QDialog::finished, parentWidget(), &QMainWindow::close);
-        this->accept();
-    }
+    disconnect(this, &QDialog::finished, parentWidget(), &QMainWindow::close);
+    this->accept();
 }
 
 
-void SignWindow::closeEvent(QCloseEvent* event) {
-    if (result() == QDialog::Rejected) {
-        QWidget* parentWindow = parentWidget();
-        parentWindow->close();
-        exit(0);
-    }
-    event->accept();
-}
+
