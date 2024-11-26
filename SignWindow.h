@@ -19,7 +19,7 @@ class SignWindow : public QDialog {
     Q_OBJECT
 
 public:
-    explicit SignWindow(MainWindow* parent = nullptr);
+    SignWindow(MainWindow* parent = nullptr);
     ~SignWindow();
 
 private slots:
@@ -31,6 +31,8 @@ private slots:
 private:
     void setLoginForm();
     void setSignupForm();
+
+    bool validateLogin(const QString &email, const QString &password);
 
     bool validateSignup(const QString &companyname, const QString &email, const QString &password);
 

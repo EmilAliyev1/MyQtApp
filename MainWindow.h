@@ -3,6 +3,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <qdatetimeedit.h>
 #include <QMainWindow>
 #include <QWidget>
 #include <QPushButton>
@@ -10,6 +11,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLineEdit>
+#include <qpieseries.h>
 #include <QString>
 #include <qtablewidget.h>
 #include "User.h"
@@ -21,13 +23,26 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
-    void showAccountInfo(const User& user);
+    void showAccountInfo(const std::shared_ptr<User> &user);
 
 private slots:
-    void populateRecordsTable();
+    void widgetAddBudget();
 
-    void showUserInfoForm() ;
+    void widgetEditCategoryBudget();
+
+    void widgetDeleteCategoryBudget();
+
+
+    void populateTransactionsTable() const;
+
+    void populateBudgetTable() const;
+
+    void showUserInfoForm() const;
     void showIncomeExpenseWidget();
+
+    void showAnalyticsWidget() const;
+
+    void showBudgetManagerWidget() const;
 
     void widgetAddTransaction();
     void widgetEditTransaction();
@@ -38,8 +53,24 @@ private:
     QWidget* createSidebarWidget();
     QWidget* createAccountInfoWidget();
     QWidget* createTransactionWidget();
+    QWidget* createAnalyticsWidget();
 
-    QPushButton* createButton(const QString& text, void (MainWindow::* slot)());
+    QWidget* createBudgetManagerWidget();
+
+
+
+
+    QCalendarWidget* calendar;
+    QPushButton* addBudgetButton;
+    QPushButton* editBudgetButton;
+    QPushButton* deleteBudgetButton;
+    QPushButton* addRecurringExpenseButton;
+
+
+
+
+    QString getDateFromDialog(QWidget *parent, const QDate& date, bool &ok);
+
     QLineEdit* createLineEdit(const QString& placeholder, bool isPasswordField = false);
     void loadStylesheet();
 
@@ -48,13 +79,18 @@ private:
     QWidget* sidebar;
     QWidget* accountInfoWidget;
     QWidget* incomeExpenseWidget;
+    QWidget* analyticsWidget;
+    QWidget* budgetManagerWidget;
 
-    QTableWidget* recordsTable;
-    User user_main;
+    QTableWidget* transactionsTable;
+    QTableWidget* budgetTable;
+    std::shared_ptr<User> user_main;
 
     QLabel* accountCompanynameLabel;
     QLabel* accountEmailLabel;
+    QLabel* accountBudgetLabel;
 
+    //void notify(QString message);
 };
 
 #endif // MAINWINDOW_H

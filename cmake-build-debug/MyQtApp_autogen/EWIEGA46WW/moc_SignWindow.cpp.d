@@ -1,5 +1,6 @@
 /home/dingo21/CLionProjects/Checking/cmake-build-debug/MyQtApp_autogen/EWIEGA46WW/moc_SignWindow.cpp: /home/dingo21/CLionProjects/Checking/SignWindow.h \
   /home/dingo21/CLionProjects/Checking/cmake-build-debug/MyQtApp_autogen/moc_predefs.h \
+  /home/dingo21/CLionProjects/Checking/Budget.h \
   /home/dingo21/CLionProjects/Checking/CurrencyConverter.h \
   /home/dingo21/CLionProjects/Checking/DataBase.h \
   /home/dingo21/CLionProjects/Checking/MainWindow.h \
@@ -315,7 +316,18 @@
   /usr/include/x86_64-linux-gnu/c++/13/bits/time_members.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/QDataStream \
+  /usr/include/x86_64-linux-gnu/qt6/QtCharts/QAbstractAxis \
+  /usr/include/x86_64-linux-gnu/qt6/QtCharts/QAbstractSeries \
+  /usr/include/x86_64-linux-gnu/qt6/QtCharts/QChartGlobal \
+  /usr/include/x86_64-linux-gnu/qt6/QtCharts/QPieSlice \
+  /usr/include/x86_64-linux-gnu/qt6/QtCharts/qabstractaxis.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCharts/qabstractseries.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCharts/qchartglobal.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCharts/qpieseries.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCharts/qpieslice.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCharts/qtcharts-config.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCharts/qtchartsexports.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QDate \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QFile \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QList \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
@@ -323,6 +335,7 @@
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QSize \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QSizeF \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractitemmodel.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qalgorithms.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qanystringview.h \
@@ -337,6 +350,7 @@
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearrayalgorithms.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearraylist.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearrayview.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcalendar.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qchar.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qcompare.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qcompare_impl.h \
@@ -348,6 +362,7 @@
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qcontiguouscache.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreevent.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qdatastream.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdatetime.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qdebug.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfiledevice.h \
@@ -417,7 +432,10 @@
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qvariant.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qvarlengtharray.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qversiontagging.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/QBrush \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/QCloseEvent \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/QPen \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/QTransform \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qaction.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qbitmap.h \
@@ -473,6 +491,7 @@
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractslider.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractspinbox.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qboxlayout.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdatetimeedit.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qframe.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qgridlayout.h \

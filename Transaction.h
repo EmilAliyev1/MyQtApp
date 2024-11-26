@@ -4,12 +4,6 @@
 
 class Transaction
 {
-private:
-    double amount{};
-    std::string category;
-    std::string date;
-    std::string notes;
-    std::string currency;
 public:
     Transaction() = default;
     Transaction(double amount, const std::string& category, const std::string& date, const std::string& notes, const std::string& currency = "USD")
@@ -36,4 +30,10 @@ public:
     void setCurrency(const std::string& newCurrency) {
         currency = newCurrency;
     }
+private:
+    double amount{};
+    std::string category{};
+    std::string date{};
+    std::string notes{};
+    std::string currency{};
 };

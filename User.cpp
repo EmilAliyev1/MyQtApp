@@ -1,28 +1,25 @@
 #include "User.h"
-
 #include <iostream>
-#include <ostream>
-
 #include "DataBase.h"
 
-User::User(std::string companyName, std::string email, std::string password)
+User::User(const std::string& companyName, const std::string& email, const std::string& password)
     : _id(DataBase::id++), _companyName(companyName), _email(email), _password(password) {}
 
-User::User(int id, std::string companyName, std::string email, std::string password)
+User::User(const int id, const std::string& companyName, const std::string& email, const std::string& password)
     : _id(id), _companyName(companyName), _email(email), _password(password) {}
 
 void User::addTransaction(double amount, const std::string& category, const std::string& date, const std::string& notes, const std::string& currency) {
-    _transactions.emplace_back(amount, category, date, notes, currency);
+    _transactions.emplace_back(std::make_shared<Transaction>(amount, category, date, notes, currency));
 }
 
 void User::editTransaction(int index, double amount, const std::string& category, const std::string& date, const std::string& notes, const std::string& currency) {
     if (index < 0 || index >= static_cast<int>(_transactions.size())) {
         throw std::out_of_range("Invalid record index.");
     }
-    _transactions[index] = Transaction(amount, category, date, notes, currency);
+    _transactions[index] = std::make_shared<Transaction>(amount, category, date, notes, currency);
 }
 
-void User::deleteTransaction(int index) {
+void User::deleteTransaction(const int index) {
     if (index < 0 || index >= static_cast<int>(_transactions.size())) {
         throw std::out_of_range("Invalid record index.");
     }
@@ -32,29 +29,55 @@ void User::setExchangeRate(const std::string& currency, double rate) {
     converter.setExchangeRate(currency, rate);
 }
 
-double User::getTotalInBaseCurrency() const {
+void User::addCategoryBudget(const std::string& category, double amount, const std::string& dueDate) {
+    categoryBudgets.emplace_back(std::make_shared<Budget>(category, amount, dueDate));
+}
+
+void User::editCategoryBudget(int index, const std::string& category, double amount, const std::string& date) {
+    if (index < 0 || index >= static_cast<int>(categoryBudgets.size())) {
+        throw std::out_of_range("Invalid record index.");
+    }
+    categoryBudgets[index] = std::make_shared<Budget>(category, amount, date);
+}
+
+auto User::deleteCategoryBudget(const int index) -> void {
+    if (index < 0 || index >= static_cast<int>(categoryBudgets.size())) {
+        throw std::out_of_range("Invalid record index.");
+    }
+    categoryBudgets.erase(categoryBudgets.begin() + index);
+}
+
+double User::getTotalBudget() const {
     double total = 0.0;
     for (const auto& transaction : _transactions) {
-        total += converter.convertToBase(transaction.getAmount(), transaction.getCurrency());
+        if (transaction) {  // Check if the shared_ptr is not null
+            total += converter.convertToBase(transaction->getAmount(), transaction->getCurrency());
+        } else {
+            std::cerr << "Null transaction encountered. Skipping." << std::endl;
+        }
     }
     return total;
+}
+
+double User::getTotalCategoryBudget(const std::string& category, const std::string& Date) const {
+    double totalSpent = 0.0;
+    for (const auto& transaction : _transactions) {
+        QDate transactionDate = QDate::fromString(QString::fromStdString(transaction->getDate()), "dd-MM-yyyy");
+        QDate budgetDate = QDate::fromString(QString::fromStdString(Date), "dd-MM-yyyy");
+
+        if (transaction && transaction->getCategory() == category && transactionDate <= budgetDate && transactionDate >= QDate::currentDate()) {
+            if (transaction->getAmount() < 0) {
+                totalSpent += converter.convertToBase(transaction->getAmount(), transaction->getCurrency());
+            }
+        }
+    }
+    // Check if spent exceeds the budget
+    return -totalSpent;
 }
 
 void User::displayUser() const
 {
     std::cout << this->_id << " " << this->_companyName << " " << this->_email << '\n';
-}
-
-void User::displayTransactions(const std::vector<Transaction> &transactions) const //delete must
-{
-    for (const auto& element : transactions) {
-        std::cout << element.getAmount() << " ";
-        std::cout << element.getCategory() << " ";
-        std::cout << element.getDate() << " ";
-        std::cout << element.getNotes() << " ";
-        std::cout << element.getCurrency() << " ";
-        std::cout << '\n';
-    }
 }
 
 int User::getId() const
@@ -76,80 +99,95 @@ std::string User::getPassword() const {
     return _password;
 }
 
-std::vector<Transaction> User::getTransactions() const
+std::vector<std::shared_ptr<Transaction>> User::getTransactions() const
 {
-    
     return _transactions;
 }
 
-void User::setId(int id)
+CurrencyConverter User::getConverter() const
+{
+    return converter;
+}
+
+std::vector<std::shared_ptr<Budget>> User::getCategoryBudgets() const {
+    return categoryBudgets;
+}
+
+bool User::isBudgetExceeded(const std::string& category, const double expense, const std::string& currentTransactionDateStr, bool edit) const {
+    if (expense < 0) {
+        bool flag;
+        QDate currentTransactionDate = QDate::fromString(QString::fromStdString(currentTransactionDateStr), "dd-MM-yyyy");
+        for (const auto& budget : categoryBudgets) {
+            if (budget && budget->getCategory() == category) {
+                double totalSpent = 0.0;
+                QDate budgetDate = QDate::fromString(QString::fromStdString(budget->getDate()), "dd-MM-yyyy");
+                for (const auto& transaction : _transactions) {
+                    QDate transactionDate = QDate::fromString(QString::fromStdString(transaction->getDate()), "dd-MM-yyyy");
+                    if (transaction->getAmount() < 0) {
+                        if (transaction && transaction->getCategory() == category && (transactionDate <= budgetDate && transactionDate >= QDate::currentDate())) {
+
+                            totalSpent += converter.convertToBase(transaction->getAmount(), transaction->getCurrency());
+                        }
+                        if (transaction && transaction->getCategory() == category && (currentTransactionDate <= budgetDate && currentTransactionDate >= QDate::currentDate())) {
+                            flag = true;
+                            if (-expense > budget->getAmount()) return true;
+                            if (edit) totalSpent += converter.convertToBase(transaction->getAmount(), transaction->getCurrency());
+                        }
+                    }
+                }
+
+                if (flag) return -(totalSpent + expense) > budget->getAmount();
+                if (budget->getCategory() == category && (currentTransactionDate <= budgetDate && currentTransactionDate >= QDate::currentDate())) return -expense > budget->getAmount();
+                return -totalSpent > budget->getAmount();
+            }
+        }
+    }
+    return false;
+}
+
+void User::setId(const int id)
 {
     _id = id;
 }
 
-void User::setCompanyName(std::string companyName)
+void User::setCompanyName(const std::string& companyName)
 {
     _companyName = companyName;
 }
 
-void User::setEmail(std::string email)
+void User::setEmail(const std::string& email)
 {
     _email = email;
 }
 
-void User::setPassword(std::string password) {
+void User::setPassword(const std::string& password) {
     _password = password;
 }
 
-bool User::readFromBinary(std::ifstream& in) {
-    if (!in.good())
-        return false;
 
-    in.read(reinterpret_cast<char*>(&_id), sizeof(_id));
-    if (!in) return false;
+std::shared_ptr<User> User::findUserByEmail(const std::string& email) {
+    for (const auto& user : DataBase::users) {
+        if (user->getEmail() == email) {
+            return user;
+        }
+    }
+    return {};
+}
 
-    size_t companyNameSize = 0;
-    in.read(reinterpret_cast<char*>(&companyNameSize), sizeof(companyNameSize));
-    if (!in) return false;
+std::shared_ptr<User>  User::findUserByCompanyName(const std::string& companyName) {
+    for (const auto& user : DataBase::users) {
+        if (user->getCompanyName() == companyName) {
+            return user;
+        }
+    }
+    return {};
+}
 
-    _companyName.resize(companyNameSize);
-    in.read(&_companyName[0], companyNameSize);
-    if (!in) return false;
-
-
-    size_t emailSize = 0;
-    in.read(reinterpret_cast<char*>(&emailSize), sizeof(emailSize));
-    if (!in) return false;
-
-    _email.resize(emailSize);
-    in.read(&_email[0], emailSize);
-    if (!in) return false;
-
-    size_t passwordSize = 0;
-    in.read(reinterpret_cast<char*>(&passwordSize), sizeof(passwordSize));
-    if (!in) return false;
-
-    _password.resize(passwordSize);
-    in.read(&_password[0], passwordSize);
-    if (!in) return false;
-
+bool User::isCategoryRepeat(const std::string& category) {
+    for (const auto& categoryBudget : categoryBudgets) {
+        if (categoryBudget && categoryBudget->getCategory() == category) {
+            return false;
+        }
+    }
     return true;
-}
-
-User User::findUserByEmail(const QString &email) {
-    for (const auto& user : DataBase::users) {
-        if (user.getEmail() == email.toStdString()) {
-            return user;
-        }
-    }
-    return {};
-}
-
-User User::findUserByCompanyName(const QString &companyName) {
-    for (const auto& user : DataBase::users) {
-        if (user.getCompanyName() == companyName.toStdString()) {
-            return user;
-        }
-    }
-    return {};
 }

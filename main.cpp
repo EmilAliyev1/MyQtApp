@@ -1,10 +1,13 @@
 #include <QApplication>
 #include "MainWindow.h"
 #include "SignWindow.h"
+#include "User.h"
 #include <iostream>
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
+
+
 
     MainWindow mainWindow;
     SignWindow* signWindow = new SignWindow(&mainWindow);

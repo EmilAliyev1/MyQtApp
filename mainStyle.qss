@@ -1,3 +1,17 @@
+QInputDialog {
+    background: #ffffff;            /* Clean white background */
+    border: 1px solid #ddd;              /* Soft border */
+    border-radius: 8px;                  /* Rounded corners */
+    padding: 10px;                       /* Padding for inner content */
+}
+QLineEdit {
+    background-color: #f9f9f9;           /* Light gray input background */
+    border: 1px solid #ccc;              /* Border for inputs */
+    border-radius: 4px;                  /* Subtle rounded corners */
+    padding: 6px;                        /* Padding for text fields */
+    font-size: 14px;                     /* Improve text readability */
+}
+
 QWidget#Sidebar {
     border: none;
     border-right: 1px solid #bababa;
@@ -5,21 +19,32 @@ QWidget#Sidebar {
 QWidget {
     background: #f0f0f0;
     color: black;
+    font-family: 'Ubuntu';
+}
+QLabel {
+
+}
+QWidget#AccountInfoWidget {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
 }
 QLabel#AccountInfoLabel {
+    background: #f0f0f0;
+    border: 1px solid #ddd;
     font-size: 22px;
     font-weight: bold;
-    color: #333333;
-    background-color: #e6f0ff;
-    padding: 10px 15px;
-    border: 1px solid #b0c4de;
-    border-radius: 8px;
+    color: #4CAF50;
     text-align: center;
+    padding: 5px;
 }
+
 QPushButton#UserInfoButton{
     border: none;
     padding: 5px;
     border-radius: 5px;
+    border-bottom: 2px solid #2C6B2F;
 }
 QPushButton#UserInfoButton:hover {
     background: #e0e0e0;
@@ -28,7 +53,7 @@ QPushButton#UserInfoButton:pressed {
     background: #d3d3d3;
 }
 QPushButton#OtherButton {
-    background-color: #4CAF50;
+    background: #4CAF50;
     color: white;
     font-size: 15px;
     padding: 10px 20px;
@@ -45,52 +70,284 @@ QPushButton#OtherButton:pressed {
 }
 
 
-
+QWidget#IncomeExpenseWidget, QWidget#BudgetManagerWidget {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+}
 QTableWidget#RecordTable {
-    background-color: #f9f9f9;
     border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fdfdfd;
+    font-size: 14px;
     gridline-color: #ddd;
-    font-size: 14px;
 }
-QHeaderView::section {
-    background-color: #4CAF50;
+QTableWidget::item {
+    padding: 6px;
+}
+QTableWidget QHeaderView::section {
+    background: #4CAF50;
     color: white;
-    padding: 4px;
     font-weight: bold;
-    border: 1px solid #ccc;
+    padding: 8px;
+    border: none;
+}
+QPushButton#TransactionButton, QPushButton#BudgetButton {
     font-size: 14px;
+    color: white;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
 }
-QHeaderView::section:hover {
-    background-color: #45A049; /* Slightly darker green */
+QPushButton#TransactionButton:hover, QPushButton#BudgetButton:hover {
+    background-color: #0056b3;
+}
+QPushButton#TransactionButton:pressed, QPushButton#BudgetButton:pressed {
+    background-color: #003f7f;
 }
 
-QHeaderView::section:pressed {
-    background-color: #D6EAF8; /* Light blue background */
-    color: #154360;           /* Dark blue text */
-    border: 1px solid #85C1E9;
-}
-QTableWidget#RecordTable::item {
-    padding: 5px;
+QWidget#AnalyticsWidget{
+    border-radius: 12px;
+    padding: 20px;
 }
 
-QPushButton#TransactionButton {
+
+QPushButton#totalIncomeB {
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 10px 20px;
+    color: white;
+    background-color: #388E3C;
+}
+
+QPushButton#totalIncomeB:hover {
+    background-color: #45a049; /* Lighter green on hover */
+    color: #ffffff; /* Text stays white */
+}
+
+QPushButton#totalIncomeB:pressed {
+    background-color: #2c6b2f; /* Darker green when pressed */
+}
+
+QPushButton#totalExpensesB {
+font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 10px 20px;
+    color: white;
+    background-color: #F44336; /* Red background for expenses */
+}
+
+QPushButton#totalExpensesB:hover {
+    color: #ffffff; /* Text stays white */
+    background-color: #e53935; /* Darker red on hover */
+}
+
+QPushButton#totalExpensesB:pressed {
+    background-color: #c62828; /* Even darker red when pressed */
+}
+
+/*QPushButton#totalProfitB{
+    font-size: 20px;
+    font-weight: bold;
+    color: #333333;
+    margin: 5px 0;
+}*/
+
+QPushButton#updateButton {
     background-color: #4CAF50;
     color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    font-size: 14px;
+    border: 2px solid #4CAF50;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
 }
-QPushButton#TransactionButton:hover {
+QPushButton#updateButton:hover {
     background-color: #45a049;
+    border-color: #45a049;
 }
-QPushButton#TransactionButton:pressed {
-    background-color: #39903d;
+QPushButton#updateButton:pressed {
+    background-color: #3e8e41;
+    border-color: #3e8e41;
 }
 
-QWidget#IncomeExpenseWidget {
+QLabel#DateLabel{
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+QDateEdit#DateEdit {
+    border: none;
+    padding: 8px;
+    font-size: 14px;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 5px;
+    background: #fff;
+    color: #333;
+    font-weight: 500;
+}
+
+
+QDateEdit#DateEdit:focus {
+    border: 2px solid #ccc;
+    border-color: #4CAF50;
+}
+
+
+QCalendarWidget {
     background-color: #ffffff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid #dcdcdc;
+    border-radius: 12px;
     padding: 10px;
+    min-width: 320px;
+    min-height: 270px;
+    font-size: 14px;
+}
+
+
+QCalendarWidget QAbstractItemView::item {
+    border: none;
+    border-radius: 6px;
+    padding: 6px;
+    margin: 3px;
+    min-width: 36px;
+    min-height: 36px;
+    background-color: transparent;
+    color: #4a4a4a;
+    text-align: center;
+}
+
+
+QCalendarWidget QAbstractItemView::item:hover {
+    background-color: #e8f5e9;
+    color: #388e3c;
+}
+
+
+QCalendarWidget QAbstractItemView::item:selected {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+
+QCalendarWidget QAbstractItemView::item:disabled {
+    color: #cccccc;
+    background-color: transparent;
+}
+
+
+QCalendarWidget QToolButton {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+
+QCalendarWidget QToolButton:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+}
+
+
+QCalendarWidget QToolButton:pressed {
+    background-color: rgba(200, 230, 201, 1.0);
+    color: #388e3c;
+}
+
+
+QCalendarWidget QToolButton:focus {
+    outline: none;
+}
+
+
+QCalendarWidget QWidget#qt_calendar_navigationbar {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 10px 0;
+}
+
+
+QCalendarWidget QWidget#qt_calendar_navigationbar QToolButton {
+    background-color: transparent;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+QCalendarWidget QHeaderView::section {
+    padding: 10px 0;
+    background-color: #388E3C;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+}
+
+
+QCalendarWidget QAbstractItemView::item[weekend=true] {
+    color: #D32F2F;
+}
+
+
+QCalendarWidget QAbstractItemView {
+    selection-background-color: #4CAF50;
+    selection-color: white;
+}
+
+
+QCalendarWidget QAbstractItemView::item:selected {
+    padding: 6px;
+    margin: 3px;
+}
+
+
+QCalendarWidget QAbstractItemView::item {
+    text-align: center;
+}
+
+QWidget#AnalyticsWidget {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+QLabel#DateLabel {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+QDateEdit#DateEdit {
+    font-size: 14px;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+}
+
+QDateEdit#DateEdit:focus {
+    border-color: #4CAF50;
+    background-color: #ffffff;
+}
+
+QGroupBox {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 10px;
 }

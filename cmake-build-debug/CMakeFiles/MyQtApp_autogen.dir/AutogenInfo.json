@@ -167,7 +167,35 @@
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsTargets-none.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsAdditionalTargetInfo.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsVersionlessTargets.cmake",
-		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsMacros.cmake"
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsMacros.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Charts/Qt6ChartsConfigVersion.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Charts/Qt6ChartsConfigVersionImpl.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Charts/Qt6ChartsConfig.cmake",
+		"/snap/clion/305/bin/cmake/linux/x64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Charts/Qt6ChartsDependencies.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGL/Qt6OpenGLConfigVersion.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGL/Qt6OpenGLConfigVersionImpl.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGL/Qt6OpenGLConfig.cmake",
+		"/snap/clion/305/bin/cmake/linux/x64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGL/Qt6OpenGLDependencies.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6/FindWrapVulkanHeaders.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGL/Qt6OpenGLTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGL/Qt6OpenGLTargets-none.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGL/Qt6OpenGLAdditionalTargetInfo.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGL/Qt6OpenGLVersionlessTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersion.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersionImpl.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfig.cmake",
+		"/snap/clion/305/bin/cmake/linux/x64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsDependencies.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets-none.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsAdditionalTargetInfo.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Charts/Qt6ChartsTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Charts/Qt6ChartsTargets-none.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Charts/Qt6ChartsAdditionalTargetInfo.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Charts/Qt6ChartsVersionlessTargets.cmake"
 	],
 	"CMAKE_SOURCE_DIR" : "/home/dingo21/CLionProjects/Checking",
 	"CROSS_CONFIG" : false,
@@ -175,6 +203,12 @@
 	"DEP_FILE_RULE_NAME" : "MyQtApp_autogen/timestamp",
 	"HEADERS" : 
 	[
+		[
+			"/home/dingo21/CLionProjects/Checking/Budget.h",
+			"MU",
+			"EWIEGA46WW/moc_Budget.cpp",
+			null
+		],
 		[
 			"/home/dingo21/CLionProjects/Checking/CurrencyConverter.h",
 			"MU",
@@ -204,12 +238,26 @@
 			"MU",
 			"EWIEGA46WW/moc_User.cpp",
 			null
+		],
+		[
+			"/home/dingo21/CLionProjects/Checking/Validate.h",
+			"MU",
+			"EWIEGA46WW/moc_Validate.cpp",
+			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
 	"INCLUDE_DIR" : "/home/dingo21/CLionProjects/Checking/cmake-build-debug/MyQtApp_autogen/include",
 	"MOC_COMPILATION_FILE" : "/home/dingo21/CLionProjects/Checking/cmake-build-debug/MyQtApp_autogen/mocs_compilation.cpp",
-	"MOC_DEFINITIONS" : [ "QT_CORE_LIB", "QT_GUI_LIB", "QT_WIDGETS_LIB" ],
+	"MOC_DEFINITIONS" : 
+	[
+		"QT_CHARTS_LIB",
+		"QT_CORE_LIB",
+		"QT_GUI_LIB",
+		"QT_OPENGLWIDGETS_LIB",
+		"QT_OPENGL_LIB",
+		"QT_WIDGETS_LIB"
+	],
 	"MOC_DEPEND_FILTERS" : 
 	[
 		[
@@ -224,6 +272,9 @@
 		"/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++",
 		"/usr/include/x86_64-linux-gnu/qt6/QtGui",
 		"/usr/include/x86_64-linux-gnu/qt6/QtWidgets",
+		"/usr/include/x86_64-linux-gnu/qt6/QtCharts",
+		"/usr/include/x86_64-linux-gnu/qt6/QtOpenGL",
+		"/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets",
 		"/usr/include",
 		"/usr/include/c++/13",
 		"/usr/include/x86_64-linux-gnu/c++/13",
@@ -264,6 +315,7 @@
 	"SETTINGS_FILE" : "/home/dingo21/CLionProjects/Checking/cmake-build-debug/CMakeFiles/MyQtApp_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
+		[ "/home/dingo21/CLionProjects/Checking/Budget.cpp", "MU", null ],
 		[
 			"/home/dingo21/CLionProjects/Checking/CurrencyConverter.cpp",
 			"MU",
@@ -273,6 +325,7 @@
 		[ "/home/dingo21/CLionProjects/Checking/MainWindow.cpp", "MU", null ],
 		[ "/home/dingo21/CLionProjects/Checking/SignWindow.cpp", "MU", null ],
 		[ "/home/dingo21/CLionProjects/Checking/User.cpp", "MU", null ],
+		[ "/home/dingo21/CLionProjects/Checking/Validate.cpp", "MU", null ],
 		[ "/home/dingo21/CLionProjects/Checking/main.cpp", "MU", null ]
 	],
 	"UIC_OPTIONS" : [],

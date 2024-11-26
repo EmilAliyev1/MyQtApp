@@ -10,6 +10,8 @@
 #include "User.h"
 #include <QRegularExpression>
 
+#include "Validate.h"
+
 SignWindow::SignWindow(MainWindow* parent)
     : QDialog(parent), mainWindow(parent) {
 
@@ -26,10 +28,9 @@ SignWindow::SignWindow(MainWindow* parent)
 
     setLoginForm();
 
-    // Center the window on the screen
     QScreen* screen = QGuiApplication::screenAt(this->geometry().center());
     if (!screen) {
-        screen = QGuiApplication::primaryScreen();  // Fallback to primary screen
+        screen = QGuiApplication::primaryScreen();
     }
     QRect screenGeometry = screen->geometry();
     int x = (screenGeometry.width() - width()) / 2;
@@ -176,90 +177,29 @@ void SignWindow::setSignupForm() {
     loginWidget->hide();
 }
 
-bool SignWindow::validateSignup(const QString& companyname, const QString& email, const QString& password) {
-    // Check if any field is empty
-    if (companyname.isEmpty() || email.isEmpty() || password.isEmpty()) {
-        QMessageBox::warning(this, "Signup Failed", "Please fill in all fields.");
-        return false;
-    }
-
-    // Simple company name validation (must be at least 3 characters)
-    if (companyname.length() < 3) {
-        QMessageBox::warning(this, "Signup Failed", "Company name must be at least 3 characters long.");
-        return false;
-    }
-
-    // Check for exactly one '@' symbol in email
-    if (email.count('@') != 1) {
-        QMessageBox::warning(this, "Signup Failed", "Invalid email address.\n\nEmail should contain exactly one '@' symbol.");
-        return false;
-    }
-
-    // Split email into local and domain parts
-    QStringList emailParts = email.split('@');
-    if (emailParts.size() != 2) {
-        QMessageBox::warning(this, "Signup Failed", "Invalid email address format.");
-        return false;
-    }
-
-    QString localPart = emailParts[0];
-    QString domainPart = emailParts[1];
-
-    // Validate the domain part
-    if (domainPart != "gmail.com" && domainPart != "outlook.com" && domainPart != "hotmail.com") {
-        QMessageBox::warning(this, "Signup Failed", "Invalid email domain.\n\nThe supported email domains are: \ngmail.com, outlook.com, or hotmail.com.");
-        return false;
-    }
-
-    // Validate the local part (basic rules: non-empty and valid characters)
-    QRegularExpression localPartRegex("^[a-zA-Z0-9._%+-]+$"); // Allows letters, numbers, '.', '_', '%', '+', '-'
-    QRegularExpressionMatch match = localPartRegex.match(localPart);
-
-    if (localPart.isEmpty() || !match.hasMatch()) {
-        QMessageBox::warning(this, "Signup Failed", "Invalid email address.\n\nThe part before '@' contains invalid characters.");
-        return false;
-    }
-
-    // Simple password validation (must be at least 6 characters)
-    if (password.length() < 6) {
-        QMessageBox::warning(this, "Signup Failed", "Password must be at least 6 characters long.");
-        return false;
-    }
-
-    // Check if company name is already taken
-    if (companyname.toStdString() == User::findUserByCompanyName(companyname).getCompanyName()) {
-        QMessageBox::warning(this, "Signup Failed", "Another user with the exact Company name was found.");
-        return false;
-    }
-
-    // Check if email is already taken
-    if (email.toStdString() == User::findUserByEmail(email).getEmail()) {
-        QMessageBox::warning(this, "Signup Failed", "Another user with the exact Email was found.");
-        return false;
-    }
-
-    // If all checks pass, return true
-    return true;
-}
-
 void SignWindow::onLoginClicked() {
     QString email = loginEmailEdit->text();
     QString password = loginPasswordEdit->text();
 
-
-
-    if (email.isEmpty() || password.isEmpty()) {
-        QMessageBox::warning(this, "Login Failed", "Please fill in both email and password.");
+    if (!Validate::validateLogin(email, password, this)) {
         return;
     }
 
-    try {
-        User user = User::findUserByEmail(email);
+    foreach(std::shared_ptr<User> user, DataBase::users) {
+        user->displayUser();
+    }
 
-        if (user.getPassword() == password.toStdString()) {
-            currentCompanyname = QString::fromStdString(user.getCompanyName());
-            currentEmail = QString::fromStdString(user.getEmail());
-            currentPassword = QString::fromStdString(user.getPassword());
+    try {
+        std::shared_ptr<User> user = User::findUserByEmail(email.toStdString());
+
+        if (user && user->getPassword() == password.toStdString()) {
+            currentCompanyname = QString::fromStdString(user->getCompanyName());
+            currentEmail = QString::fromStdString(user->getEmail());
+            currentPassword = QString::fromStdString(user->getPassword());
+
+            user->setExchangeRate("EUR", 1.1);
+            user->setExchangeRate("JPY", 0.0075);
+            user->setExchangeRate("GBP", 1.25);
 
             auto* mainWindow = dynamic_cast<MainWindow*>(parentWidget());
             if (mainWindow) {
@@ -286,35 +226,38 @@ void SignWindow::onSignupClicked() {
     QString email = signupEmailEdit->text();
     QString password = signupPasswordEdit->text();
 
-    User user = User::findUserByEmail(email);
+    foreach(std::shared_ptr<User> user, DataBase::users) {
+        user->displayUser();
+    }
 
-
-    if (!validateSignup(companyname, email, password)) {
-        // If validation fails, return early (no need to proceed)
+    if (!Validate::validateSignup(companyname, email, password, this)) {
         return;
     }
 
-    // If all validations pass
     currentCompanyname = companyname;
     currentEmail = email;
     currentPassword = password;
 
-    // Create the new user
-    User newUser(companyname.toStdString(), email.toStdString(), password.toStdString());
-    DataBase::addUser(newUser);
+    std::shared_ptr<User> newUser = std::make_shared<User>(
+        companyname.toStdString(),
+        email.toStdString(),
+        password.toStdString()
+    );
 
-    // Show success message
+    newUser->setExchangeRate("EUR", 1.1);
+    newUser->setExchangeRate("JPY", 0.0075);
+    newUser->setExchangeRate("GBP", 1.25);
+
+    DataBase::addUser(newUser);
+    DataBase::saveUsers();
+
     QMessageBox::information(this, "Signup Success", "Account created successfully!");
 
-    // Pass user info to the main window
     auto* mainWindow = dynamic_cast<MainWindow*>(parentWidget());
     if (mainWindow) {
         mainWindow->showAccountInfo(newUser);
     }
-
     disconnect(this, &QDialog::finished, parentWidget(), &QMainWindow::close);
     this->accept();
 }
-
-
 

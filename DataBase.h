@@ -1,17 +1,16 @@
 #pragma once
+
 #include <vector>
+#include <memory>
 #include "User.h"
-#include <vector>
 
-
-class DataBase
-{
-private:
+class DataBase {
 public:
-    static int id;
+    static int id; // Auto-increment ID for users
     static void initializeId();
-    static std::vector<User> users;
-    static void addUser(const User& user);
+    static std::vector<std::shared_ptr<User>> users;
+
+    static void addUser(const std::shared_ptr<User>& user);
     static bool saveUsers();
-    static std::vector<User> GetAllUsers();
+    static std::vector<std::shared_ptr<User>> GetAllUsers();
 };
